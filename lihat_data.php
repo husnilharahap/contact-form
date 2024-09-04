@@ -99,3 +99,25 @@ $conn->close();
             border-radius: 4px;
         }
     </style>
+    </head>
+<body>
+
+<div class="container">
+    <?php if ($data_found): ?>
+        <h2>Data yang Telah Dimasukkan</h2>
+        <p><strong>ID:</strong> <?php echo $row["id"]; ?></p>
+        <p><strong>Nama:</strong> <?php echo $row["nama"]; ?></p>
+        <p><strong>NIM:</strong> <?php echo $row["nim"]; ?></p>
+        <p><strong>Kelas:</strong> <?php echo $row["kelas"]; ?></p>
+        <p><strong>Email:</strong> <?php echo $row["email"]; ?></p>
+        <p><strong>Gender:</strong> <?php echo $row["gender"]; ?></p>
+        <p><strong>Saran:</strong> <?php echo $row["saran"]; ?></p>
+        <a href="form_input.php" class="btn-back">Kembali</a>
+    <?php else: ?>
+        <div class="error">Data tidak ditemukan atau ID tidak diberikan.</div>
+        <a href="form_input.php" class="btn-back">Kembali</a>
+    <?php endif; ?>
+</div>
+
+</body>
+</html>
