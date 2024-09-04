@@ -1,3 +1,59 @@
+<?php
+// Koneksi ke database
+$servername = "localhost";
+$username = "root"; 
+$password = ""; 
+$dbname = "kontak_db";
+
+// Membuat koneksi
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Memeriksa koneksi
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Membuat tabel kontak
+$sql_create_table = "CREATE TABLE IF NOT EXISTS kontak (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(255) NOT NULL,
+    nim VARCHAR(255) NOT NULL,
+    kelas VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    saran TEXT NOT NULL
+)";
+$conn->query($sql_create_table);
+
+// Memproses form jika data dikirim
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Mengambil data dari form
+    $nama = $_POST['nama'];
+    $nim = $_POST['nim'];
+    $kelas = $_POST['kelas'];
+    $email = $_POST['email'];
+    $gender = $_POST['gender'];
+    $saran = $_POST['saran'];
+
+    // Menyimpan data ke database
+    $stmt = $conn->prepare("INSERT INTO kontak (nama, nim, kelas, email, gender, saran) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $nama, $nim, $kelas, $email, $gender, $saran);
+
+    if ($stmt->execute()) {
+        // Redirect ke halaman lihat data dengan parameter ID terakhir yang dimasukkan
+        $last_id = $stmt->insert_id;
+        header("Location: lihat_data.php?id=" . $last_id);
+        exit();
+    } else {
+        echo "<p>Error: " . $stmt->error . "</p>";
+    }
+
+    // Menutup statement
+    $stmt->close();
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
